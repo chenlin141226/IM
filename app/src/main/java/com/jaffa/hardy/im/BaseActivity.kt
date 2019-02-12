@@ -1,4 +1,4 @@
-package com.jaffa.hardy.im.activity
+package com.jaffa.hardy.im
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -10,7 +10,7 @@ abstract class BaseActivity : AppCompatActivity() {
         init()
     }
 
-    open fun init() {
+    private fun init() {
 
     }
 

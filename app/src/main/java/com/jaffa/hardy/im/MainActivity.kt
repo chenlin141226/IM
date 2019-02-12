@@ -1,8 +1,7 @@
-package com.jaffa.hardy.im.activity
+package com.jaffa.hardy.im
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import com.jaffa.hardy.im.R
 
 class MainActivity : AppCompatActivity() {
 
