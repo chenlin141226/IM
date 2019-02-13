@@ -1,5 +1,8 @@
 package com.jaffa.hardy.im
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.support.v4.app.ActivityCompat
 import com.jaffa.hardy.im.contract.LoginContract
 import com.jaffa.hardy.im.presenter.LoginPresenter
 import kotlinx.android.synthetic.main.activity_login.*
@@ -10,7 +13,7 @@ class LoginActivity : BaseActivity(),LoginContract.View{
 
     override fun getlayoutResId(): Int = R.layout.activity_login
 
-    val presenter by lazy { LoginPresenter(this) }
+    private val presenter by lazy { LoginPresenter(this) }
 
     override fun init() {
         super.init()
@@ -24,10 +27,40 @@ class LoginActivity : BaseActivity(),LoginContract.View{
     fun login(){
         //隐藏软键盘
         hideSofeKeyboard()
-        val userName = userName.text.trim().toString()
-        val password = password.text.trim().toString()
-        presenter.login(userName,password)
+
+        //检查权限
+        if(hasWriteExternalStoragePermission()){
+            val userName = userName.text.trim().toString()
+            val password = password.text.trim().toString()
+            presenter.login(userName,password)
+        }else applyriteExternalStoragePermission()
+
     }
+
+    /**
+     * 申请权限
+     */
+    private fun applyriteExternalStoragePermission() {
+        val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        ActivityCompat.requestPermissions(this,permissions,0)
+    }
+
+    /**
+     * 检查是否有权限
+     */
+    private fun hasWriteExternalStoragePermission(): Boolean {
+        val result = ActivityCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        return result == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            //用户同意开始登录
+            login()
+        }else toast(getString(R.string.permission_denied))
+    }
+
 
     override fun onUserNameError() {
         userName.error = getString(R.string.user_name_error)
