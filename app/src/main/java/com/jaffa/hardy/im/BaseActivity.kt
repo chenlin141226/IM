@@ -3,6 +3,7 @@ package com.jaffa.hardy.im
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Window
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -28,4 +29,5 @@ abstract class BaseActivity : AppCompatActivity() {
     fun dismissProgress(){
         progressBar.dismiss()
     }
+
 }

@@ -1,6 +1,7 @@
 package com.jaffa.hardy.im
 
 import com.jaffa.hardy.im.contract.LoginContract
+import com.jaffa.hardy.im.presenter.LoginPresenter
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
@@ -9,6 +10,22 @@ class LoginActivity : BaseActivity(),LoginContract.View{
 
     override fun getlayoutResId(): Int = R.layout.activity_login
 
+    val presenter by lazy { LoginPresenter(this) }
+
+    override fun init() {
+        super.init()
+        login.setOnClickListener {login()}
+        login.setOnEditorActionListener { p0, p1, p2 ->
+            login()
+            true
+        }
+    }
+
+    fun login(){
+        val userName = userName.text.trim().toString()
+        val password = password.text.trim().toString()
+        presenter.login(userName,password)
+    }
 
     override fun onUserNameError() {
         userName.error = getString(R.string.user_name_error)

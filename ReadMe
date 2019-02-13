@@ -1,0 +1,55 @@
+1、MVC和MVP的区别
+   M:数据相关的类就对应于model层
+   V：xml里面的xml文件就对应于MVC的view层
+   C：Actviity,Fragment就是我们的controller层
+
+   原理：
+     通过controller的控制去操作model层的数据，并且返回给view层展示.
+     比如当用户出发事件的时候，view层会发送指令到controller层，接着controller去通知model层更新数据，model层更新完数据以后直接显示在view层上，这就是MVC的工作原理
+
+  缺陷：
+     1、问题就在于xml作为view层，控制能力实在太弱了，你想去动态的改变一个页面的背景，或者动态的隐藏/显示一个按钮，
+     必须要获得这个view 对象去操控,这些都没办法在xml中做，只能把代码写在activity中，造成了activity既是controller层，又是view层的这样一个窘境。
+     如果是一个逻辑很复杂的页面，activity或者fragment是不是动辄上千行呢？这样不仅写起来麻烦，维护起来更是噩梦。
+     2、MVC还有一个重要的缺陷，view层和model层是相互可知的，这意味着两层之间存在耦合.
+
+     mvp
+     对于Android来说，MVP的model层相对于MVC是一样的,而activity和fragment不再是controller层，而是纯粹的view层，所有关于用户事件的转发全部交由presenter层处理。
+
+     与MVC最明显的差别就是view层和model层不再相互可知，完全的解耦，MVC中View会直接从Model中读取数据而不是通过 Controller。
+     取而代之的presenter层充当了桥梁的作用，用于操作view层发出的事件传递到presenter层中，presenter层去操作model层，并且将数据返回给view层，整个过程中view层和model层完全没有联系。
+
+     看到这里大家可能会问，虽然view层和model层解耦了，但是view层和presenter层不是耦合在一起了吗？
+     其实不是的，对于view层和presenter层的通信，我们是可以通过接口实现的，具体的意思就是说我们的activity，
+     fragment可以去实现实现定义好的接口，而在对应的presenter中通过接口调用方法。
+
+     MVP的优点
+     1.降低耦合度，隐藏数据，Activity中代码更简洁
+     2.模块职责划分明显
+     3.方便测试驱动开发
+     4.代码复用度较高
+     5.代码灵活性
+
+2、事件分发
+      Activity  --->  ViewGroup  ---->View
+
+      1、Activity对点击事件的分发机制
+          Activiyt    window(phoneWindow)  DecorView  ViewGroup   View
+           调用Activity.dispatchTouchEvent()
+
+           getWindow().superDispatchTouchEvent(ev)
+
+           mDecor.superDispatchTouchEvent(event),即ViewGroup.dispatchTouchEvent(ev),实现了事件从Actviity向ViewGroup的传递
+           因为DecorView是继承FrameLayout，Fragment是继承ViewGroup
+
+           如果该方法返回true 则 Activity.dispatchTouchEvent()方法返回true，事件分发结束
+           如果该方法返回false则Activity.dispatchTouchEvent()方法返回Activity.onTouchEvent()方法，无论返回是什么事件都结束
+           事件在边界范围内时默认返回false
+
+      2、ViewGroup对点击事件的分发机制
+          调用该控件所在布局的ViewGroup.dispatchTouchEvent(ev),每次viewGroup事件分发的时候都会调用onIntercepetTouchEvent方法询问是否拦截事件
+          默认是不拦截事件，允许事件向子View的传递，通过for循环找到被点击的相应子view控件，调用子View的dispatchTouchEvent方法实现了事件从viewGroup向
+          子View的传递
+          如果拦截事件，不允许事件向子View传递，调用ViewGroup父类的dispatchTouchEvent方法，自己处理该事件，调用自身的onTouch方法
+
+      3、View对点击事件的分发机制
