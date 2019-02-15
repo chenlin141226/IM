@@ -20,7 +20,7 @@ class RegisterActivity : BaseActivity(),RegisterContract.View {
         password.error = getString(R.string.confirm_password_error)
     }
 
-    override fun StartRegister() {
+    override fun onStartRegister() {
         showProgress(getString(R.string.registering))
     }
 
