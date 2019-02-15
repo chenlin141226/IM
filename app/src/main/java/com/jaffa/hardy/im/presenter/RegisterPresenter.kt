@@ -3,9 +3,12 @@ package com.jaffa.hardy.im.presenter
 import cn.bmob.v3.BmobUser
 import cn.bmob.v3.exception.BmobException
 import cn.bmob.v3.listener.SaveListener
+import com.hyphenate.chat.EMClient
+import com.hyphenate.exceptions.HyphenateException
 import com.jaffa.hardy.im.contract.RegisterContract
 import com.jaffa.hardy.im.extentions.isValidPassword
 import com.jaffa.hardy.im.extentions.isValidUserName
+import org.jetbrains.anko.doAsync
 
 class RegisterPresenter(val view : RegisterContract.View) : RegisterContract.Presenter {
 
@@ -15,7 +18,7 @@ class RegisterPresenter(val view : RegisterContract.View) : RegisterContract.Pre
                 //确认密码是否一直
                 if(password == confirmPassword){
                     //开始注册
-                   // view.onStartRegister()
+                    view.onStartRegister()
                     //环信注册
                     registerBmob(userName,password)
                 }else view.onConfirmPasswordError()
@@ -25,15 +28,16 @@ class RegisterPresenter(val view : RegisterContract.View) : RegisterContract.Pre
 
 
     //Bmob云注册
-    private fun registerBmob(userName: String, password: String) {
+    private fun registerBmob(userName: String, passWord: String) {
         val bu = BmobUser()
         bu.username = userName
-        bu.setPassword(password)
+        bu.setPassword(passWord)
 
         bu.signUp(object : SaveListener<BmobUser>() {
             override fun done(s: BmobUser?, e: BmobException?) {
                 if(e == null){
-
+                    //注册到环信中
+                    registerEaseMob(userName,passWord)
                 }else{
                     //注册失败
                     view.onRegisterFails()
@@ -41,5 +45,18 @@ class RegisterPresenter(val view : RegisterContract.View) : RegisterContract.Pre
             }
         })
 
+    }
+
+    private fun registerEaseMob(userName: String, passWord: String) {
+           doAsync {
+               try {
+                   //开放授权注册
+                   EMClient.getInstance().createAccount(userName,passWord)
+                   uiThread { view.onRegisterInSuccess() }
+
+               }catch (e:HyphenateException){
+                   view.onRegisterFails()
+               }
+           }
     }
 }

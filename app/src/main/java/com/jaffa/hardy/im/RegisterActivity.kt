@@ -51,8 +51,11 @@ class RegisterActivity : BaseActivity(),RegisterContract.View {
     }
 
     override fun onRegisterInSuccess() {
-
+       dismissProgress()
+        toast(R.string.register_success)
         //进入登录界面
+        finish()
+
     }
 
     override fun onRegisterFails() {
