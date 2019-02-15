@@ -40,7 +40,8 @@ class RegisterPresenter(val view : RegisterContract.View) : RegisterContract.Pre
                     registerEaseMob(userName,passWord)
                 }else{
                     //注册失败
-                    view.onRegisterFails()
+                    if(e.errorCode == 202)view.onUserExit()
+                    else view.onRegisterFails()
                 }
             }
         })
