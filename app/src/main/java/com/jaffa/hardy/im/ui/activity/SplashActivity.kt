@@ -1,6 +1,7 @@
-package com.jaffa.hardy.im
+package com.jaffa.hardy.im.ui.activity
 
 import android.os.Handler
+import com.jaffa.hardy.im.R
 import com.jaffa.hardy.im.contract.SplashContract
 import com.jaffa.hardy.im.presenter.SplashActivityPresenter
 import org.jetbrains.anko.startActivity

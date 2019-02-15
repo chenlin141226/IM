@@ -1,4 +1,4 @@
-package com.jaffa.hardy.im
+package com.jaffa.hardy.im.ui.activity
 
 import android.app.ProgressDialog
 import android.content.Context

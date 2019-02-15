@@ -1,8 +1,9 @@
-package com.jaffa.hardy.im
+package com.jaffa.hardy.im.ui.activity
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.support.v4.app.ActivityCompat
+import com.jaffa.hardy.im.R
 import com.jaffa.hardy.im.contract.LoginContract
 import com.jaffa.hardy.im.presenter.LoginPresenter
 import kotlinx.android.synthetic.main.activity_login.*

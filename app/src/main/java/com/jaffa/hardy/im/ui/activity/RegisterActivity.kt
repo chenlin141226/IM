@@ -1,10 +1,8 @@
-package com.jaffa.hardy.im
+package com.jaffa.hardy.im.ui.activity
 
-import android.view.KeyEvent
-import android.widget.TextView
+import com.jaffa.hardy.im.R
 import com.jaffa.hardy.im.contract.RegisterContract
 import com.jaffa.hardy.im.presenter.RegisterPresenter
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
 import org.jetbrains.anko.toast
 
