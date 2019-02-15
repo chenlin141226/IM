@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.jaffa.hardy.im.R
-import java.text.FieldPosition
 
 class ContactListAdapter(val context : Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
